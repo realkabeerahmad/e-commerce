@@ -5,7 +5,7 @@ import {
   getAll,
   updateOne,
   deleteOne,
-} from "../controller/store.js";
+} from "../controller/store";
 const store = express.Router();
 
 store.post("/", create);

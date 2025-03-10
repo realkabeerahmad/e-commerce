@@ -1,9 +1,9 @@
-import { storeModel } from "../model/store.js";
-import { HttpError } from "../utils/errors.js";
-import { handleError, sendResponse } from "../utils/util.js"
+import express from 'express';
+import { storeModel } from "../model/store";
+import { HttpError } from "../utils/errors";
+import { handleError, sendResponse } from "../utils/util"
 
-
-export const create = async (req, res) => {
+export const create = async (req: express.Request, res: express.Response) => {
     try {
         const { name, description, address, phone, email, totalSales } = req.body;
 
@@ -34,11 +34,11 @@ export const create = async (req, res) => {
     }
 };
 
-export const getAll = async (req, res) => {
+export const getAll = async (req: express.Request, res: express.Response) => {
     try {
         const stores = await storeModel.find();
         if (!stores.length) {
-            throw new HttpError("NotFoundError", "No stores found!", 404);
+            throw new HttpError("NotFoundError", "No stores found!", 404, null);
         }
         sendResponse(res, 200, "All stores fetched successfully", stores);
     } catch (error) {
@@ -46,12 +46,12 @@ export const getAll = async (req, res) => {
     }
 };
 
-export const getOne = async (req, res) => {
+export const getOne = async (req: express.Request, res: express.Response) => {
     try {
         const { id } = req.params;
         const store = await storeModel.findById({ _id: id });
         if (!store) {
-            throw new HttpError("NotFoundError", `Store '${id}' not found`, 404);
+            throw new HttpError("NotFoundError", `Store '${id}' not found`, 404, null);
         }
         sendResponse(res, 200, "Store found successfully", store);
     } catch (error) {
@@ -59,7 +59,7 @@ export const getOne = async (req, res) => {
     }
 };
 
-export const updateOne = async (req, res) => {
+export const updateOne = async (req: express.Request, res: express.Response) => {
     try {
         const { id } = req.params;
         const { name, description, address, phone, email, totalSales } = req.body;
@@ -79,7 +79,7 @@ export const updateOne = async (req, res) => {
         }
         const store = await storeModel.findByIdAndUpdate(id, _store, { new: true });
         if (!store) {
-            throw new HttpError("NotFoundError", `Store with ID '${id}' not found`, 404);
+            throw new HttpError("NotFoundError", `Store with ID '${id}' not found`, 404, null);
         }
 
         sendResponse(res, 200, "Store updated successfully", store);
@@ -88,12 +88,12 @@ export const updateOne = async (req, res) => {
     }
 };
 
-export const deleteOne = async (req, res) => {
+export const deleteOne = async (req: express.Request, res: express.Response) => {
     try {
         const { id } = req.params;
         const store = await storeModel.findByIdAndDelete(id);
         if (!store) {
-            throw new HttpError("NotFoundError", `Store with ID '${id}' not found`, 404);
+            throw new HttpError("NotFoundError", `Store with ID '${id}' not found`, 404, null);
         }
         sendResponse(res, 200, "Store deleted successfully", store);
     } catch (error) {

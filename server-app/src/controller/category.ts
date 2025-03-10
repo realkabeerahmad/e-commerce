@@ -1,9 +1,10 @@
-import { categoryModel } from "../model/category.js";
-import { HttpError } from "../utils/errors.js";
-import { handleError, sendResponse } from "../utils/util.js"
+import express from 'express';
+import { categoryModel } from "../model/category";
+import { HttpError } from "../utils/errors";
+import { handleError, sendResponse } from "../utils/util"
 
 
-export const create = async (req, res) => {
+export const create = async (req: express.Request, res: express.Response) => {
     try {
         const { name, description, parent } = req.body;
         const _name = name.toLowerCase();
@@ -16,7 +17,7 @@ export const create = async (req, res) => {
         if (parent && parent.length > 0) {
             const existingParent = await categoryModel.findById(parent)
             if (!existingParent) {
-                throw new HttpError("NotFoundError", `Parent category with id ${parent} do not exists`, 404);
+                throw new HttpError("NotFoundError", `Parent category with id ${parent} do not exists`, 404, null);
             }
         }
 
@@ -27,11 +28,11 @@ export const create = async (req, res) => {
     }
 };
 
-export const getAll = async (req, res) => {
+export const getAll = async (req: express.Request, res: express.Response) => {
     try {
         const categories = await categoryModel.find();
         if (!categories.length) {
-            throw new HttpError("NotFoundError", "No categories found!", 404);
+            throw new HttpError("NotFoundError", "No categories found!", 404, null);
         }
         sendResponse(res, 200, "All categories fetched successfully", categories);
     } catch (error) {
@@ -39,12 +40,12 @@ export const getAll = async (req, res) => {
     }
 };
 
-export const getOne = async (req, res) => {
+export const getOne = async (req: express.Request, res: express.Response) => {
     try {
         const { id } = req.params;
         const category = await categoryModel.findOne({ name: id });
         if (!category) {
-            throw new HttpError("NotFoundError", `Category '${id}' not found`, 404);
+            throw new HttpError("NotFoundError", `Category '${id}' not found`, 404, null);
         }
         sendResponse(res, 200, "Category found successfully", category);
     } catch (error) {
@@ -52,7 +53,7 @@ export const getOne = async (req, res) => {
     }
 };
 
-export const updateOne = async (req, res) => {
+export const updateOne = async (req: express.Request, res: express.Response) => {
     try {
         const { id } = req.params;
         const { name, description, parent } = req.body;
@@ -60,7 +61,7 @@ export const updateOne = async (req, res) => {
 
         const category = await categoryModel.findByIdAndUpdate(id, { _name, description, parent }, { new: true });
         if (!category) {
-            throw new HttpError("NotFoundError", `Category with ID '${id}' not found`, 404);
+            throw new HttpError("NotFoundError", `Category with ID '${id}' not found`, 404, null);
         }
 
         sendResponse(res, 200, "Category updated successfully", category);
@@ -69,12 +70,12 @@ export const updateOne = async (req, res) => {
     }
 };
 
-export const deleteOne = async (req, res) => {
+export const deleteOne = async (req: express.Request, res: express.Response) => {
     try {
         const { id } = req.params;
         const category = await categoryModel.findByIdAndDelete(id);
         if (!category) {
-            throw new HttpError("NotFoundError", `Category with ID '${id}' not found`, 404);
+            throw new HttpError("NotFoundError", `Category with ID '${id}' not found`, 404, null);
         }
         sendResponse(res, 200, "Category deleted successfully", category);
     } catch (error) {

@@ -1,7 +1,9 @@
-import { productModel } from "../model/products.js";
-import { sendResponse, handleError } from "../utils/util.js";
+import express from 'express'
+import { productModel } from "../model/products";
+import { HttpError } from '../utils/errors';
+import { sendResponse, handleError } from "../utils/util";
 
-export const create = async (req, res, next) => {
+export const create = async (req: express.Request, res: express.Response) => {
   try {
     const { name, description, quantity, unitPrice, store, category, variants } = req.body;
     const Product = {
@@ -22,45 +24,45 @@ export const create = async (req, res, next) => {
     const newProduct = await productModel.create(Product);
     sendResponse(res, 201, `Product with name '${name}' added in store`, newProduct);
   } catch (error) {
-    handleError(res, error);
+    handleError(error, res);
   }
 };
 
-export const getAll = async (req, res, next) => {
+export const getAll = async (req: express.Request, res: express.Response) => {
   try {
     const products = await productModel.find({});
-    if(products.length <= 0) sendResponse(res, 404, 'Products not Found!', data = null);
-    sendResponse(res, 200, 'Products Fetched successfully!', data = products);
+    if (products.length <= 0) throw new HttpError("NotFoundError", "No products found!", 404, null);
+    sendResponse(res, 200, 'Products Fetched successfully!', products);
   } catch (error) {
     handleError(error, res);
   }
 };
 
-export const getOne = (req, res, next) => {
+export const getOne = (req: express.Request, res: express.Response) => {
   let http_status = 200;
   let message = "End point is working.";
   try {
-    sendResponse(res, message, http_status, data);
+    sendResponse(res, http_status, message, null);
   } catch (error) {
     handleError(error, res);
   }
 };
 
-export const updateOne = (req, res, next) => {
+export const updateOne = (req: express.Request, res: express.Response) => {
   let http_status = 200;
   let message = "End point is working.";
   try {
-    sendResponse(res, message, http_status, data);
+    sendResponse(res, http_status, message, null);
   } catch (error) {
     handleError(error, res);
   }
 };
 
-export const deleteOne = (req, res, next) => {
+export const deleteOne = (req: express.Request, res: express.Response) => {
   let http_status = 200;
   let message = "End point is working.";
   try {
-    sendResponse(res, message, http_status, data);
+    sendResponse(res, http_status, message, null);
   } catch (error) {
     handleError(error, res);
   }

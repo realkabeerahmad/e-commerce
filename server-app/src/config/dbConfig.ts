@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 
-const connectDB = async (conn_str) => {
+const connectDB = async (conn_str: any) => {
     try {
         const connect = await mongoose.connect(`${conn_str}`);
         console.log(`MongoDB Connected: ${connect.connection.host, connect.connection.name}`);

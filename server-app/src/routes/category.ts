@@ -5,7 +5,7 @@ import {
   getAll,
   updateOne,
   deleteOne,
-} from "../controller/category.js";
+} from "../controller/category";
 const category = express.Router();
 
 category.post("/", create);

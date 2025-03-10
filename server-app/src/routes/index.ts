@@ -1,8 +1,8 @@
 import express from "express";
-import products from "./products.js";
-import category from "./category.js";
-import store from "./store.js";
-// import users from "./users.js";
+import products from "./products";
+import category from "./category";
+import store from "./store";
+// import users from "./users";
 
 const index = express.Router();
 
