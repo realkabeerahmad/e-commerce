@@ -2,27 +2,53 @@ import express from 'express'
 import { productModel } from "../model/products";
 import { HttpError } from '../utils/errors';
 import { sendResponse, handleError } from "../utils/util";
+import { product1sModel } from '../model/product1s';
 
 export const create = async (req: express.Request, res: express.Response) => {
   try {
-    const { name, description, quantity, unitPrice, store, category, variants } = req.body;
+    const { name, description, store, category, shelfed } = req.body;
     const Product = {
+      name: name,
+      description: description,
+      store: store,
+      category: category,
+      shelfed: shelfed
+    };
+    const newProduct = await productModel.create(Product);
+    sendResponse(res, 201, `Product with name '${name}' added in store`, newProduct);
+  } catch (error) {
+    handleError(error, res);
+  }
+};
+
+export const createDetail = async (req: express.Request, res: express.Response) => {
+  try {
+    const { id } = req.params
+    const { name, description, quantity, unitPrice, colors, dimensions, weight, size, shelfed } = req.body;
+    const productDetail = {
       name: name,
       description: description,
       quantity: {
         available: quantity.available,
-        sold: quantity.sold,
+        sold: quantity.sold
       },
       unitPrice: {
         price: unitPrice.price,
-        unit: unitPrice.unit
+        currency: unitPrice.currency,
       },
-      store: store,
-      category: category,
-      variants: variants
+      colors: colors,
+      dimensions: {
+        length: dimensions.length,
+        width: dimensions.width,
+        height: dimensions.height
+      },
+      weight: weight,
+      size: size,
+      product: id,
+      shelfed: shelfed
     };
-    const newProduct = await productModel.create(Product);
-    sendResponse(res, 201, `Product with name '${name}' added in store`, newProduct);
+    const newProductDetail = await product1sModel.create(productDetail);
+    sendResponse(res, 201, `Product Details for product id '${id}' added in store`, newProductDetail);
   } catch (error) {
     handleError(error, res);
   }
@@ -52,21 +78,13 @@ export const getOne = async (req: express.Request, res: express.Response) => {
 export const updateOne = async (req: express.Request, res: express.Response) => {
   try {
     const { id } = req.params
-    const { name, description, quantity, unitPrice, store, category, variants } = req.body;
+    const { name, description, store, category, shelfed } = req.body;
     const Product = {
       name: name,
       description: description,
-      quantity: {
-        available: quantity.available,
-        sold: quantity.sold,
-      },
-      unitPrice: {
-        price: unitPrice.price,
-        unit: unitPrice.unit
-      },
       store: store,
       category: category,
-      variants: variants
+      shelfed: shelfed
     };
 
     const product = await productModel.findByIdAndUpdate(id, Product, { new: true });
@@ -88,12 +106,3 @@ export const deleteOne = (req: express.Request, res: express.Response) => {
     handleError(error, res);
   }
 };
-
-
-export const deleteAll = (req: express.Request, res: express.Response) => {
-  try {
-    productModel.find
-  } catch (error) {
-
-  }
-}
