@@ -5,6 +5,8 @@ import {
   getAll,
   updateOne,
   deleteOne,
+  createDetail,
+  updateDetail
 } from "../controller/products";
 const products = express.Router();
 
@@ -13,5 +15,7 @@ products.get("/", getAll);
 products.get("/:id", getOne);
 products.put("/:id", updateOne);
 products.delete("/:id", deleteOne);
+products.post("/detail/:id", createDetail);
+products.put("/detail/:id", updateDetail);
 
 export default products;

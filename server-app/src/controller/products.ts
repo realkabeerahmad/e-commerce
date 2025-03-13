@@ -21,39 +21,6 @@ export const create = async (req: express.Request, res: express.Response) => {
   }
 };
 
-export const createDetail = async (req: express.Request, res: express.Response) => {
-  try {
-    const { id } = req.params
-    const { name, description, quantity, unitPrice, colors, dimensions, weight, size, shelfed } = req.body;
-    const productDetail = {
-      name: name,
-      description: description,
-      quantity: {
-        available: quantity.available,
-        sold: quantity.sold
-      },
-      unitPrice: {
-        price: unitPrice.price,
-        currency: unitPrice.currency,
-      },
-      colors: colors,
-      dimensions: {
-        length: dimensions.length,
-        width: dimensions.width,
-        height: dimensions.height
-      },
-      weight: weight,
-      size: size,
-      product: id,
-      shelfed: shelfed
-    };
-    const newProductDetail = await product1sModel.create(productDetail);
-    sendResponse(res, 201, `Product Details for product id '${id}' added in store`, newProductDetail);
-  } catch (error) {
-    handleError(error, res);
-  }
-};
-
 export const getAll = async (req: express.Request, res: express.Response) => {
   try {
     const products = await productModel.find({}).populate("category", "name -_id").populate("store", "name -_id");
@@ -102,6 +69,74 @@ export const deleteOne = (req: express.Request, res: express.Response) => {
   let message = "End point is working.";
   try {
     sendResponse(res, http_status, message, null);
+  } catch (error) {
+    handleError(error, res);
+  }
+};
+
+
+
+export const updateDetail = async (req: express.Request, res: express.Response) => {
+  try {
+    const { id } = req.params
+    const { name, description, quantity, unitPrice, colors, dimensions, weight, size, shelfed } = req.body;
+    const _productDetail = {
+      name: name,
+      description: description,
+      quantity: {
+        available: quantity.available,
+        sold: quantity.sold
+      },
+      unitPrice: {
+        price: unitPrice.price,
+        currency: unitPrice.currency,
+      },
+      colors: colors,
+      dimensions: {
+        length: dimensions.length,
+        width: dimensions.width,
+        height: dimensions.height,
+        unit: dimensions.unit
+      },
+      weight: { value: weight.value, unit: weight.unit },
+      size: size,
+      shelfed: shelfed
+    };
+    const productDetail = await product1sModel.findByIdAndUpdate(id, _productDetail, { new: true });
+    sendResponse(res, 201, `Product Details for product id '${id}' added in store`, productDetail);
+  } catch (error) {
+    handleError(error, res);
+  }
+};
+
+export const createDetail = async (req: express.Request, res: express.Response) => {
+  try {
+    const { id } = req.params
+    const { name, description, quantity, unitPrice, colors, dimensions, weight, size, shelfed } = req.body;
+    const productDetail = {
+      name: name,
+      description: description,
+      quantity: {
+        available: quantity.available,
+        sold: quantity.sold
+      },
+      unitPrice: {
+        price: unitPrice.price,
+        currency: unitPrice.currency,
+      },
+      colors: colors,
+      dimensions: {
+        length: dimensions.length,
+        width: dimensions.width,
+        height: dimensions.height
+      },
+      weight: weight,
+      size: size,
+      product: id,
+      shelfed: shelfed
+    };
+    const newProductDetail = await product1sModel.create(productDetail);
+    sendResponse(res, 201, `Product Details for product id '${id}' added in store`, newProductDetail);
   } catch (error) {
     handleError(error, res);
   }
