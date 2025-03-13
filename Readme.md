@@ -52,13 +52,24 @@ To run the project in development mode:
 http://127.0.0.1:5001/
 ```
 
-### **1. Create a Short URL**
-**Endpoint:** `POST /`
+### **1. Create a Store**
+**Endpoint:** `POST /store`
 
 #### **Request Body**
 ```json
 {
-    "fullUrl": "https://example.com"
+  "name": "Store Name",
+  "description": "Store Description",
+  "address": {
+    "street": "Store Address",
+    "city": "LHR",
+    "state": "PU",
+    "country": "PK",
+    "zipCode": "54001"
+  },
+  "phone": "03000000000",
+  "email": "username@example.com",
+  "totalSales": 0
 }
 ```
 
