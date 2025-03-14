@@ -39,7 +39,7 @@ export const create = async (req: express.Request, res: express.Response) => {
 
 export const getAll = async (req: express.Request, res: express.Response) => {
     const startDtime = new Date;
-    const service = 'CreateStore';
+    const service = 'getAllStore';
     const _ip = req.ip || "";
     try {
         const stores = await storeModel.find();
@@ -54,7 +54,7 @@ export const getAll = async (req: express.Request, res: express.Response) => {
 
 export const getOne = async (req: express.Request, res: express.Response) => {
     const startDtime = new Date;
-    const service = 'CreateStore';
+    const service = 'getStore';
     const _ip = req.ip || "";
     try {
         const { id } = req.params;
@@ -70,7 +70,7 @@ export const getOne = async (req: express.Request, res: express.Response) => {
 
 export const updateOne = async (req: express.Request, res: express.Response) => {
     const startDtime = new Date;
-    const service = 'CreateStore';
+    const service = 'updateStore';
     const _ip = req.ip || "";
     try {
         const { id } = req.params;
@@ -102,7 +102,7 @@ export const updateOne = async (req: express.Request, res: express.Response) => 
 
 export const deleteOne = async (req: express.Request, res: express.Response) => {
     const startDtime = new Date;
-    const service = 'CreateStore';
+    const service = 'deleteStore';
     const _ip = req.ip || "";
     try {
         const { id } = req.params;
